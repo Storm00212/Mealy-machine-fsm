@@ -1,28 +1,29 @@
 /*
  * Mealy Machine Design (mealy_t)
- * This module implements a Mealy finite state machine.
- * The output 'z' depends on both the current state 'q' and the input 'x'.
- * State update: q toggles (flips) when x=1, stays the same when x=0 (unless reset).
- * Output: z = q XOR x, computed combinatorially.
+ * This is another Mealy machine. Like mealy_d, the output depends on the internal state and the input.
+ * The state flips (changes from 0 to 1 or 1 to 0) only when the input x is 1; if x is 0, the state stays put, unless reset.
+ * The output is a mix (XOR) of the current state and the input, calculated instantly.
+ * XOR means exclusive or: 1 if bits differ, 0 if same.
  */
 module mealy_t (
-    input clk,      // Clock signal
-    input reset,    // Asynchronous reset signal
-    input x,        // Input bit
-    output reg z    // Output bit (registered for synthesis, but computed in always @*)
+    input clk,      // Clock - the timing signal that drives the machine
+    input reset,    // Reset - use this to reset the state to 0 and start over
+    input x,        // Input x - the bit we send to the machine
+    output reg z    // Output z - the bit the machine sends back
 );
-    reg q;  // State register, initialized to 0 on reset
+    reg q;  // Internal state - keeps track of things, resets to 0
 
-    // Sequential logic: Update state on clock edge or reset
+    // State update logic: Changes the state on clock ticks or reset
     always @(posedge clk or posedge reset) begin
         if (reset)
-            q <= 1'b0;  // Reset state to 0
+            q <= 1'b0;  // Reset: set state to 0
         else if (x)
-            q <= ~q;     // Toggle state when input x is 1
+            q <= ~q;     // If input x is 1, flip the state (0 becomes 1, 1 becomes 0)
+        // If x is 0, state stays the same
     end
 
-    // Combinational logic: Compute output based on current state and input
+    // Output calculation: Computes the output right away
     always @(*) begin
-        z = q ^ x;  // Output z is XOR of state q and input x
+        z = q ^ x;  // Output z is state XOR input x
     end
 endmodule
