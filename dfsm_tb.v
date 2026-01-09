@@ -16,7 +16,7 @@ module fsm_tb;
     // Setting up the unit under test (the mealy_t machine we're testing)
     // If you want to test a different machine, like mealy_d, change the name here
 
-    mealy_t uut (
+    mealy_d uut (
         .clk(clk),
         .reset(reset),
         .x(x),
