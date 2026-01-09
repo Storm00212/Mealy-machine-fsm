@@ -35,7 +35,7 @@ module fsm_tb;
 
     initial begin
         // Save the signals to a file for later viewing
-        $dumpfile("fsm.vcd");
+        $dumpfile("dfsm.vcd");
         $dumpvars(0, fsm_tb);
 
         // Get everything ready
